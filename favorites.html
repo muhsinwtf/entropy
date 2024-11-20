@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1024">
+    <title>Favorites - muhsin</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>" type="image/svg+xml">
+    <!-- Vercel Analytics -->
+<script defer src="/_vercel/insights/script.js"></script>
+<!-- Vercel Speed Insights -->
+<script defer src="/_vercel/speed-insights/script.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-text-size-adjust: none;
+        }
+
+        :root {
+            --base-color: #99cc3f;
+            --text-color: #000000;
+        }
+
+        body {
+            font-family: "TeX Gyre Heros Cn", sans-serif;
+            line-height: 1.6;
+            background-color: var(--base-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            min-width: 1024px;
+            overflow-x: auto;
+        }
+
+        .site-content {
+            width: 1024px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .site-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: bold;
+            font-size: 2.5rem;
+        }
+
+        .site-title a {
+            color: inherit;
+            text-decoration: none;
+            text-transform: lowercase;
+        }
+
+        .navigation {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-button {
+            cursor: pointer;
+            display: inline-block;
+            background-color: var(--base-color);
+            border: 2px solid var(--text-color);
+            color: var(--text-color);
+            padding: 10px 20px;
+            font-family: "TeX Gyre Heros Cn", sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            text-decoration: none;
+            text-transform: lowercase;
+            margin: 0 10px;
+        }
+
+        .nav-button:hover {
+            background-color: var(--text-color);
+            color: var(--base-color);
+            transform: scale(1.05);
+        }
+
+        .nav-button svg {
+            fill: currentColor;
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .favorites-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--text-color);
+            border-radius: 12px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            text-transform: lowercase;
+        }
+
+        .scroll-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .scroll-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--text-color);
+            background-color: var(--base-color);
+            color: var(--text-color);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-button:hover {
+            background-color: var(--text-color);
+            color: var(--base-color);
+            transform: scale(1.05);
+        }
+
+        .favorites-grid {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding-bottom: 20px;
+        }
+
+        .favorites-grid::-webkit-scrollbar {
+            display: none;
+        }
+
+        .favorite-item {
+            flex: 0 0 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--text-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .favorite-item:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+
+        .favorite-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--text-color);
+        }
+
+        .favorite-item h3 {
+            padding: 15px;
+            font-size: 1.2em;
+            text-transform: lowercase;
+        }
+
+        .favorite-item p {
+            padding: 0 15px 15px;
+            opacity: 0.8;
+        }
+
+        .favorite-item a {
+            display: block;
+            padding: 15px;
+            text-align: right;
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: bold;
+            border-top: 2px solid var(--text-color);
+        }
+
+        .favorite-item a:hover {
+            background-color: var(--text-color);
+            color: var(--base-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="site-content">
+        <header>
+            <h1 class="site-title"><a href="index.html">muhsin</a></h1>
+            <nav class="navigation">
+                <a href="index.html" class="nav-button">← Back Home</a>
+                <button class="nav-button" onclick="togglePlay()">
+                    <svg viewBox="0 0 24 24" id="play-icon">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <span id="button-text">Play Music</span>
+                </button>
+                <audio id="audio-player" src="song.mp3"></audio>
+            </nav>
+        </header>
+        
+        <main>
+            <section class="favorites-section">
+                <div class="section-header">
+                    <h2 class="section-title">🎬 Favorite Videos</h2>
+                    <div class="scroll-buttons">
+                        <button class="scroll-button" onclick="scrollContent('videos', -1)">←</button>
+                        <button class="scroll-button" onclick="scrollContent('videos', 1)">→</button>
+                    </div>
+                </div>
+                <div class="favorites-grid" id="videos">
+                    <div class="favorite-item">
+                        <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Never Gonna Give You Up">
+                        <h3>Never Gonna Give You Up</h3>
+                        <p>The classic Rick Astley masterpiece that never gets old!</p>
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Watch Video →</a>
+                    </div>
+                    <div class="favorite-item">
+                        <img src="https://img.youtube.com/vi/jNQXAC9IVRw/maxresdefault.jpg" alt="Me at the zoo">
+                        <h3>Me at the zoo</h3>
+                        <p>The very first YouTube video ever uploaded. A piece of internet history!</p>
+                        <a href="https://www.youtube.com/watch?v=jNQXAC9IVRw" target="_blank">Watch Video →</a>
+                    </div>
+                    <div class="favorite-item">
+                        <img src="https://img.youtube.com/vi/9bZkp7q19f0/maxresdefault.jpg" alt="Gangnam Style">
+                        <h3>Gangnam Style</h3>
+                        <p>PSY's viral hit that broke YouTube's view counter!</p>
+                        <a href="https://www.youtube.com/watch?v=9bZkp7q19f0" target="_blank">Watch Video →</a>
+                    </div>
+                    <div class="favorite-item">
+                        <img src="https://img.youtube.com/vi/kJQP7kiw5Fk/maxresdefault.jpg" alt="Despacito">
+                        <h3>Despacito</h3>
+                        <p>Luis Fonsi's summer anthem that took over the world.</p>
+                        <a href="https://www.youtube.com/watch?v=kJQP7kiw5Fk" target="_blank">Watch Video →</a>
+                    </div>
+                    <div class="favorite-item">
+                        <img src="https://img.youtube.com/vi/JGwWNGJdvx8/maxresdefault.jpg" alt="Shape of You">
+                        <h3>Shape of You</h3>
+                        <p>Ed Sheeran's catchy hit that dominated the charts.</p>
+                        <a href="https://www.youtube.com/watch?v=JGwWNGJdvx8" target="_blank">Watch Video →</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="favorites-section">
+                <div class="section-header">
+                    <h2 class="section-title">😂 Favorite Memes</h2>
+                    <div class="scroll-buttons">
+                        <button class="scroll-button" onclick="scrollContent('memes', -1)">←</button>
+                        <button class="scroll-button" onclick="scrollContent('memes', 1)">→</button>
+                    </div>
+                </div>
+                <div class="favorites-grid" id="memes">
+                    <div class="favorite-item">
+                        <img src="https://i.kym-cdn.com/entries/icons/original/000/000/091/TrollFace.jpg" alt="Trollface">
+                        <h3>Trollface</h3>
+                        <p>The iconic trollface meme that started it all!</p>
+                    </div>
+                    <div class="favorite-item">
+                        <img src="https://i.kym-cdn.com/entries/icons/original/000/026/638/cat.jpg" alt="Cat Vibing">
+                        <h3>Vibing Cat</h3>
+                        <p>Cat vibing to music is a mood!</p>
+                    </div>
+                    <div class="favorite-item">
+                        <img src="https://i.kym-cdn.com/entries/icons/original/000/027/475/Screen_Shot_2018-10-25_at_11.02.15_AM.png" alt="Pikachu Surprised">
+                        <h3>Surprised Pikachu</h3>
+                        <p>When something totally predictable happens but you're still shocked.</p>
+                    </div>
+                    <div class="favorite-item">
+                        <img src="https://i.kym-cdn.com/entries/icons/original/000/030/157/womanyellingcat.jpg" alt="Woman Yelling at Cat">
+                        <h3>Woman Yelling at Cat</h3>
+                        <p>The perfect combination of drama and confusion.</p>
+                    </div>
+                    <div class="favorite-item">
+                        <img src="https://i.kym-cdn.com/entries/icons/original/000/023/397/C-658VsXoAo3ovC.jpg" alt="Distracted Boyfriend">
+                        <h3>Distracted Boyfriend</h3>
+                        <p>The meme template that spawned endless variations.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="favorites-section">
+                <div class="section-header">
+                    <h2 class="section-title">🎵 Favorite Songs</h2>
+                    <div class="scroll-buttons">
+                        <button class="scroll-button" onclick="scrollContent('songs', -1)">←</button>
+                        <button class="scroll-button" onclick="scrollContent('songs', 1)">→</button>
+                    </div>
+                </div>
+                <div class="favorites-grid" id="songs">
+                    <div class="favorite-item">
+                        <img src="https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96" alt="Bohemian Rhapsody">
+                        <h3>Bohemian Rhapsody</h3>
+                        <p>Queen's masterpiece that changed music forever.</p>
+                        <a href="https://open.spotify.com/track/3z8h0TU7ReDPLIbEnYhWZb" target="_blank">Listen on Spotify →</a>
+                    </div>
+                    <div class="favorite-item">
+                        <img src="https://i.scdn.co/image/ab67616d0000b273404f12d12a7c6b9ed4263656" alt="Take on Me">
+                        <h3>Take on Me</h3>
+                        <p>a-ha's iconic 80s hit with that unforgettable music video.</p>
+                        <a href="https://open.spotify.com/track/2WfaOiMkCvy7F5fcp2zZ8L" target="_blank">Listen on Spotify →</a>
+                    </div>
+                    <div class="favorite-item">
+                        <img src="https://i.scdn.co/image/ab67616d0000b2734ae1c4c5c45aabe565499163" alt="Billie Jean">
+                        <h3>Billie Jean</h3>
+                        <p>Michael Jackson's legendary hit with the iconic bassline.</p>
+                        <a href="https://open.spotify.com/track/5ChkMS8OtdzJeqyybCc9R5" target="_blank">Listen on Spotify →</a>
+                    </div>
+                    <div class="favorite-item">
+                        <img src="https://i.scdn.co/image/ab67616d0000b273712701c5e263efc8726b1464" alt="Sweet Child O' Mine">
+                        <h3>Sweet Child O' Mine</h3>
+                        <p>Guns N' Roses' classic with that unforgettable guitar riff.</p>
+                        <a href="https://open.spotify.com/track/7o2CTH4ctstm8TNelqjb51" target="_blank">Listen on Spotify →</a>
+                    </div>
+                    <div class="favorite-item">
+                        <img src="https://i.scdn.co/image/ab67616d0000b273f46b9d202509a8f7384b90de" alt="Smells Like Teen Spirit">
+                        <h3>Smells Like Teen Spirit</h3>
+                        <p>Nirvana's grunge anthem that defined a generation.</p>
+                        <a href="https://open.spotify.com/track/5ghIJDpPoe3CfHMGu71E6T" target="_blank">Listen on Spotify →</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        let isPlaying = localStorage.getItem('isPlaying') === 'true';
+        const audio = document.getElementById('audio-player');
+        const buttonText = document.getElementById('button-text');
+        const playIcon = document.getElementById('play-icon');
+
+        // Set initial state
+        window.onload = function() {
+            updatePlayerState();
+            if (isPlaying) {
+                audio.play();
+            }
+        };
+
+        function updatePlayerState() {
+            buttonText.textContent = isPlaying ? 'Pause Music' : 'Play Music';
+            playIcon.innerHTML = isPlaying 
+                ? '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'
+                : '<path d="M8 5v14l11-7z"/>';
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                audio.pause();
+            } else {
+                audio.play();
+            }
+            isPlaying = !isPlaying;
+            localStorage.setItem('isPlaying', isPlaying);
+            updatePlayerState();
+        }
+
+        // Save audio position before unload
+        window.onbeforeunload = function() {
+            localStorage.setItem('audioPosition', audio.currentTime);
+        };
+
+        // Restore audio position
+        audio.addEventListener('loadedmetadata', function() {
+            const savedPosition = localStorage.getItem('audioPosition');
+            if (savedPosition !== null) {
+                audio.currentTime = parseFloat(savedPosition);
+            }
+        });
+
+        // Scroll functionality
+        function scrollContent(containerId, direction) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const scrollAmount = 300;
+            const newScrollPosition = container.scrollLeft + (direction * scrollAmount);
+            
+            container.scrollTo({
+                left: newScrollPosition,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
